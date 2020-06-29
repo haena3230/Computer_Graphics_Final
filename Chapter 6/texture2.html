@@ -1,0 +1,77 @@
+<!-- 쉐이더를 활용한 텍스처 매핑 html -->
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8">
+
+<!-- 정점쉐이더 생성 -->
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
+varying float s, t;
+
+void
+main()
+{
+    float pi = acos(0.0);
+    s= 0.5*acos(vPosition.x)/pi;
+    t = 0.5*asin(vPosition.y/sqrt(1.0-vPosition.x*vPosition.x))/pi;
+    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+}
+</script>
+
+<!-- 단편쉐이더 생성 -->
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying float s, t;
+uniform sampler2D texture;
+
+void
+main()
+{
+
+    gl_FragColor = texture2D( texture, vec2(s, t));
+
+}
+</script>
+
+<!-- 버튼 생성 -->
+<p> </p>
+<!-- 텍스처 변경 버튼 -->
+<button type="Button0" onclick="configureTexture(document.getElementById('texImage1'))">
+    <img src="./texture/Image1.jpg" alt="Image1" width="80" height="80"></button>
+
+<button type="Button1" onclick="configureTexture(document.getElementById('texImage2'))">
+    <img src="./texture/Image2.jpg" alt="Image2" width="80" height="80"></button>
+<!-- 객체 회전 버튼 -->
+<p> </p>
+<button id="Button2">오른쪽으로 회전</button>
+<button id="Button3">왼쪽으로 회전</button>
+<button id="Button4">위로 회전</button>
+<button id="Button5">아래로 회전</button>
+<!-- 구 분할 버튼 -->
+<p> </p>
+<button id="Button6">분할 증가</button>
+<button id="Button7">분할 감소</button>
+
+<p></p>
+<!-- 불러오기 -->
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="texture2.js"></script>
+
+<body>
+    <canvas id="gl-canvas" width="512" height="512">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+    <img id="texImage1" src="./texture/Image1.jpg" hidden></img>
+    <img id="texImage2" src="./texture/Image2.jpg" hidden></img>
+</body>
+
+</html>
